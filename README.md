@@ -9,7 +9,7 @@ Synopsis
 ```lua
 local cputime = require 'cputime'
 
-local utime, stime, cutime, cstime, err = cputime.get_cputime()
+local utime, stime, err = cputime.get_process_cputime()
 if err ~= nil then
   -- error handling...
 end
@@ -20,24 +20,30 @@ See also [example](/example/).
 Description
 --
 
-This package provides a method to measure (and dispense) the CPU time.
-The library bridges to `times()` function of `sys/times.h`.
+This package provides methods to measure (and dispense) the CPU time.
+The library bridges to `getrusage()` function of `sys/time.h` and `sys/resource.h`.
 
 Functions
 --
 
-### `get_cputime()`
+### `get_process_cputime()`
 
-This function returns the measured CPU time.
+This function returns the measured CPU time of current process.
+
+### `get_children_process_cputime()`
+
+This function returns the measured CPU time for all children process.
+
+### `get_thread_cputime()`
+
+This function returns the measured CPU time of current thread. This function is __Linux-specific__ and the function is available since Linux 2.6.26.
 
 #### Return value
 
-According the following order:
+The above methods returns values that accords the following order:
 
-- utime (number or nil): user CPU time. This variable represents milliseconds.
-- stime (number or nil): system CPU time. This variable represents milliseconds.
-- cutime (number or nil): user CPU time of terminated child processes. This variable represents milliseconds.
-- cstime (number or nil): system CPU time of terminated child processes. This variable represents milliseconds.
+- utime (number or nil): user CPU time. This variable represents microseconds.
+- stime (number or nil): system CPU time. This variable represents microseconds.
 - err (string or nil): error response
 
 When err is nil, other values are actual number value. On the other hand, when err is not nil, other values are nil.
@@ -50,7 +56,7 @@ This library doesn't work on Windows (I have a will to support it).
 See also
 --
 
-- http://pubs.opengroup.org/onlinepubs/9699919799/basedefs/sys_times.h.html
+- http://man7.org/linux/man-pages/man2/getrusage.2.html
 
 License
 --
