@@ -21,10 +21,10 @@ static int get_cputime(lua_State* L) {
     const _cputime_result_t result = _get_cputime();
 
     if (result.error == NULL) {
-        lua_pushnumber(L, (double)result.tms->tms_utime / sysconf(_SC_CLK_TCK) / 1000);
-        lua_pushnumber(L, (double)result.tms->tms_stime / sysconf(_SC_CLK_TCK) / 1000);
-        lua_pushnumber(L, (double)result.tms->tms_cutime / sysconf(_SC_CLK_TCK) / 1000);
-        lua_pushnumber(L, (double)result.tms->tms_cstime / sysconf(_SC_CLK_TCK) / 1000);
+        lua_pushnumber(L, (double)result.tms->tms_utime / sysconf(_SC_CLK_TCK) * 1000);
+        lua_pushnumber(L, (double)result.tms->tms_stime / sysconf(_SC_CLK_TCK) * 1000);
+        lua_pushnumber(L, (double)result.tms->tms_cutime / sysconf(_SC_CLK_TCK) * 1000);
+        lua_pushnumber(L, (double)result.tms->tms_cstime / sysconf(_SC_CLK_TCK) * 1000);
         lua_pushnil(L);
     } else {
         lua_pushnil(L);
