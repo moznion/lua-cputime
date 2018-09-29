@@ -4,4 +4,5 @@
 /.luarocks
 *.o
 *.so
+*.src.rock
 
