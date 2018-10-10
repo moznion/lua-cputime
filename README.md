@@ -1,7 +1,7 @@
 lua-cputime
 ==
 
-A bridge library for CPU time measurement.
+A wrapper library for CPU time measurement.
 
 Synopsis
 --
@@ -21,7 +21,7 @@ Description
 --
 
 This package provides methods to measure (and dispense) the CPU time.
-The library bridges to `getrusage()` function of `sys/time.h` and `sys/resource.h`.
+This library bridges to `getrusage()` function of `sys/time.h` and `sys/resource.h` on UNIX system; on the other hand, this library wraps `GetProcessTimes()` and `GetThreadTimes()` on Windows environment.
 
 Functions
 --
@@ -32,7 +32,10 @@ This function returns the measured CPU time of current process.
 
 ### `get_thread_cputime()`
 
-This function returns the measured CPU time of current thread. This function is __Linux-specific__ and the function is available since Linux 2.6.26.
+This function returns the measured CPU time of current thread. This function is only supported following OS:
+
+- Linux (since 2.6.26)
+- Windows
 
 #### Return value
 
@@ -44,15 +47,12 @@ The above methods returns values that accords the following order:
 
 When err is nil, other values are actual number value. On the other hand, when err is not nil, other values are nil.
 
-Disclaimer
---
-
-This library doesn't work on Windows (I have a will to support it).
-
 See also
 --
 
 - http://man7.org/linux/man-pages/man2/getrusage.2.html
+- [GetProcessTimes()](https://msdn.microsoft.com/library/cc429139.aspx)
+- [GetThreadTimes()](https://msdn.microsoft.com/library/cc429147.aspx)
 
 License
 --

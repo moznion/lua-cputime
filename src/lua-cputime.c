@@ -1,5 +1,23 @@
 #include "lua-cputime.h"
 
+#ifdef WIN32
+static int get_process_cputime(lua_State* L) {
+    FILETIME created, exited, stime, utime;
+
+    const BOOL succ = GetProcessTimes(GetCurrentProcess(), &created, &exited, &stime, &utime);
+    if (succ) {
+        lua_pushnumber(L, ((LONGLONG) utime.dwHighDateTime << 32 | utime.dwLowDateTime) / 10);
+        lua_pushnumber(L, ((LONGLONG) stime.dwHighDateTime << 32 | stime.dwLowDateTime) / 10);
+        lua_pushnil(L);
+    } else {
+        lua_pushnil(L);
+        lua_pushnil(L);
+        lua_pushstring(L, "failed to measure the CPU time");
+    }
+
+    return 3;
+}
+#else
 typedef struct _cputime_result {
     unsigned long utime;
     unsigned long stime;
@@ -40,9 +58,11 @@ static int get_process_cputime(lua_State* L) {
 
     return 3;
 }
+#endif
 
-#ifdef __linux__
+#if defined(__linux__) || defined(WIN32)
 static int get_thread_cputime(lua_State* L) {
+#ifdef __linux__
     const _cputime_result_t result = _get_cputime(RUSAGE_THREAD);
 
     if (result.error == NULL) {
@@ -54,14 +74,27 @@ static int get_thread_cputime(lua_State* L) {
         lua_pushnil(L);
         lua_pushstring(L, result.error);
     }
+#elif WIN32
+    FILETIME created, exited, stime, utime;
 
+    const BOOL succ = GetThreadTimes(GetCurrentThread(), &created, &exited, &stime, &utime);
+    if (succ) {
+        lua_pushnumber(L, ((LONGLONG) utime.dwHighDateTime << 32 | utime.dwLowDateTime) / 10);
+        lua_pushnumber(L, ((LONGLONG) stime.dwHighDateTime << 32 | stime.dwLowDateTime) / 10);
+        lua_pushnil(L);
+    } else {
+        lua_pushnil(L);
+        lua_pushnil(L);
+        lua_pushstring(L, "failed to measure the CPU time");
+    }
+#endif
     return 3;
 }
 #endif
 
 static const struct luaL_Reg R[] = {
     {"get_process_cputime", get_process_cputime},
-#ifdef __linux__
+#if defined(__linux__) || defined(WIN32)
     {"get_thread_cputime", get_thread_cputime},
 #endif
     {NULL, NULL},
