@@ -6,8 +6,8 @@ static int get_process_cputime(lua_State* L) {
 
     const BOOL succ = GetProcessTimes(GetCurrentProcess(), &created, &exited, &stime, &utime);
     if (succ) {
-        lua_pushnumber(L, ((LONGLONG) utime.dwHighDateTime << 32 | utime.dwLowDateTime) / 10);
-        lua_pushnumber(L, ((LONGLONG) stime.dwHighDateTime << 32 | stime.dwLowDateTime) / 10);
+        lua_pushnumber(L, ((uint64_t) utime.dwHighDateTime << 32 | utime.dwLowDateTime) / 10);
+        lua_pushnumber(L, ((uint64_t) stime.dwHighDateTime << 32 | stime.dwLowDateTime) / 10);
         lua_pushnil(L);
     } else {
         lua_pushnil(L);
@@ -79,8 +79,8 @@ static int get_thread_cputime(lua_State* L) {
 
     const BOOL succ = GetThreadTimes(GetCurrentThread(), &created, &exited, &stime, &utime);
     if (succ) {
-        lua_pushnumber(L, ((LONGLONG) utime.dwHighDateTime << 32 | utime.dwLowDateTime) / 10);
-        lua_pushnumber(L, ((LONGLONG) stime.dwHighDateTime << 32 | stime.dwLowDateTime) / 10);
+        lua_pushnumber(L, ((uint64_t) utime.dwHighDateTime << 32 | utime.dwLowDateTime) / 10);
+        lua_pushnumber(L, ((uint64_t) stime.dwHighDateTime << 32 | stime.dwLowDateTime) / 10);
         lua_pushnil(L);
     } else {
         lua_pushnil(L);
