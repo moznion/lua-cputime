@@ -41,22 +41,6 @@ static int get_process_cputime(lua_State* L) {
     return 3;
 }
 
-static int get_children_process_cputime(lua_State* L) {
-    const _cputime_result_t result = _get_cputime(RUSAGE_CHILDREN);
-
-    if (result.error == NULL) {
-        lua_pushnumber(L, result.utime);
-        lua_pushnumber(L, result.stime);
-        lua_pushnil(L);
-    } else {
-        lua_pushnil(L);
-        lua_pushnil(L);
-        lua_pushstring(L, result.error);
-    }
-
-    return 3;
-}
-
 #ifdef __linux__
 static int get_thread_cputime(lua_State* L) {
     const _cputime_result_t result = _get_cputime(RUSAGE_THREAD);
@@ -77,7 +61,6 @@ static int get_thread_cputime(lua_State* L) {
 
 static const struct luaL_Reg R[] = {
     {"get_process_cputime", get_process_cputime},
-    {"get_children_process_cputime", get_children_process_cputime},
 #ifdef __linux__
     {"get_thread_cputime", get_thread_cputime},
 #endif

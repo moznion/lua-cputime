@@ -30,10 +30,6 @@ Functions
 
 This function returns the measured CPU time of current process.
 
-### `get_children_process_cputime()`
-
-This function returns the measured CPU time for all children process.
-
 ### `get_thread_cputime()`
 
 This function returns the measured CPU time of current thread. This function is __Linux-specific__ and the function is available since Linux 2.6.26.
