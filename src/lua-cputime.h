@@ -28,7 +28,7 @@ extern "C" {
 }
 #endif
 
-#define CPUTIME_VERSION "0.1.0-0"
+#define CPUTIME_VERSION "0.2.0-0"
 #define CPUTIME_LIBNAME "cputime"
 #define CPUTIME_COPYRIGHT "Copyright © 2018 moznion, http://moznion.net/ <moznion@gmail.com>"
 #define CPUTIME_DESCRIPTION "A bridge library of CPU time measurement"
